@@ -2,7 +2,7 @@
 
 COURS_DIR=cours
 IMG_DIR=images
-LIST=cours.list
+LIST=cours.json
 
 TITLE=""
 DATE=""
@@ -14,23 +14,25 @@ build-html() {
   cp $COURS_DIR/styles/"$THEME".css output-html/revealjs/css/theme/"$THEME".css
   cp -r images/* output-html/images/
 
-  while IFS=$ read cours titre modules; do
-    for module in $modules; do
+  cours=$(jq .course_name $LIST)
+
+  for c in $(jq .modules[] $LIST); do
+    for module in $(echo $c | sed 's/"//g'); do
       cat $COURS_DIR/$module >> $COURS_DIR/slide-$cours
     done
-    TITLE=$titre
+    TITLE=$(jq .course_name $LIST)
 
     # Header2 are only usefull for beamer, they need to be replaced with Header3 for revealjs interpretation
     sed 's/^## /### /' $COURS_DIR/slide-$cours > tmp_slide-$cours
     mv tmp_slide-$cours $COURS_DIR/slide-$cours
     echo "Build $TITLE"
-    docker run -v $PWD:/formations osones/revealjs-builder:stable --standalone --template=/formations/templates/template.revealjs --slide-level 3 -V theme=$THEME -V navigation=frame -V revealjs-url=$REVEALJSURL -V slideNumber=true -V title="$TITLE" -V institute=Osones -o /formations/output-html/"$cours".html /formations/$COURS_DIR/slide-$cours
+    docker run -v $PWD:/formations osones/revealjs-builder:stable --standalone --template=/formations/templates/template.revealjs --slide-level 3 -V theme=$THEME -V navigation=frame -V revealjs-url=$REVEALJSURL -V slideNumber=true -V title="$TITLE" -V institute=Osones -o /formations/output-html/$(echo $cours | sed 's/"//g').html /formations/$COURS_DIR/slide-$cours
     rm -f $COURS_DIR/slide-$cours
-  done < $LIST
+  done
 }
 build-pdf() {
   mkdir -p output-pdf
-  for cours in $(cut -d$ -f1 $LIST); do
+  for cours in $(jq .course_name $LIST | sed 's/"//g'); do
     docker run -v $PWD/output-pdf:/output -v $PWD/output-html/"$cours".html:/index.html -v $PWD/images:/images osones/wkhtmltopdf:stable -O landscape -s A5 -T 0 file:///index.html\?print-pdf /output/"$cours".pdf
   done
 }
@@ -78,9 +80,9 @@ else
 fi
 
 if [[ $COURSE != "" ]]; then
-  grep $COURSE $LIST > cours.list.tmp
+  jq .$COURSE $LIST > cours.json.tmp
   [ $? -eq 1 ] && echo "Course $COURSE doesn't exist, please refer to cours.list" && exit 1
-  LIST=cours.list.tmp
+  LIST=cours.json.tmp
 fi
 
 if [[ ! $OUTPUT =~ html|pdf|all ]]; then
@@ -93,4 +95,4 @@ elif [[ $OUTPUT == "pdf" || $OUTPUT == "all" ]]; then
     build-html
     build-pdf
 fi
-rm -f cours.list.tmp
+rm -f cours.json.tmp

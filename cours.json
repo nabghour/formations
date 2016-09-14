@@ -1,0 +1,18 @@
+{
+  "docker": {
+    "course_name": "docker",
+    "course_description": "Formation Docker",
+    "modules": [
+      "0-docker-osones.md",
+      "10-docker-introduction.md"
+    ]
+  },
+  "openstack": {
+    "course_name": "OpenStack",
+    "course_description": "Formation OpenStack",
+    "modules": [
+      "0-openstack-osones.md",
+      "10-openstack-introduction.md"
+    ]
+  }
+}
