@@ -5,8 +5,8 @@ platform: linux
 image_resource:
   type: docker-image
   source:
-    repository: vsense/pelican-ci
-    tag: latest
+    repository: osones/wkhtmltopdf
+    tag: concourse
 inputs:
   - name: formations
 outputs:

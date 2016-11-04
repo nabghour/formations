@@ -13,8 +13,8 @@ build-html() {
   mkdir -p $OUTPUT_HTML_DIR/revealjs/css/theme
   mkdir -p $OUTPUT_HTML_DIR/images
 
-  cp "$STYLE_DIR"/"$THEME".css $OUTPUT_HTML_DIR/revealjs/css/theme/"$THEME".css
-  cp -r "$IMG_DIR"/* $OUTPUT_HTML_DIR/images/
+  cp "$STYLE_DIR"/"$THEME".css "$OUTPUT_HTML_DIR"/revealjs/css/theme/"$THEME".css
+  cp -r "$IMG_DIR"/* "$OUTPUT_HTML_DIR"/images/
 
   while IFS=$ read cours titre modules; do
     for module in $modules; do
