@@ -2,7 +2,7 @@
 
 COURS_DIR=formations/cours
 IMG_DIR=formations/images
-SYTLE_DIR=formations/styles
+STYLE_DIR=formations/styles
 LIST=formations/cours.list
 OUTPUT_HTML_DIR=formations/output-html
 
@@ -81,7 +81,7 @@ done
 if [[ $THEME == "" ]]; then
   THEME="osones"
 else
-  ls styles/"$THEME".css &> /dev/null
+  ls "$STYLE_DIR"/"$THEME".css &> /dev/null
   [ $? -eq 2 ] && echo "Theme $THEME doesn't exist" && exit 1
 fi
 
