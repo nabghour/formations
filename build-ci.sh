@@ -33,7 +33,7 @@ build-html() {
 
 build-pdf() {
   for cours in $(cut -d$ -f1 $LIST); do
-    wkhtmltopdf -O landscape -s A5 -T 0 file://bucket-formations/html/"$cours".html\?print-pdf ../pdf/"$cours".pdf
+    wkhtmltopdf -O landscape -s A5 -T 0 http://concourse-formations.s3-website-eu-west-1.amazonaws.com/html/"$cours".html\?print-pdf ../pdf/"$cours".pdf
   done
 }
 
