@@ -9,6 +9,8 @@ image_resource:
     tag: concourse
 inputs:
   - name: formations
+  - name: s3-concourse-formations
+    path: bucket-formations
 outputs:
   - name: pdf
 run:

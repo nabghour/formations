@@ -1,3 +1,2 @@
 #!/bin/bash
-formations/build.sh -o pdf -t osones -u http://formations.osones.com/revealjs
-cp -r formations/output-pdf/* pdf/
+bash ./formations/build-ci.sh -o pdf -t osones -u http://osones.com/revealjs
