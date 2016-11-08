@@ -33,6 +33,10 @@ build-html() {
 
 build-pdf() {
   for cours in $(cut -d$ -f1 $LIST); do
+    echo "un cran au dessus"
+    head ../bucket-formations/html/"$cours".html
+    echo "same level"
+    head bucket-formations/html/"$cours".html
     wkhtmltopdf -O landscape -s A5 -T 0 file://bucket-formations/html/"$cours".html\?print-pdf pdf/"$cours".pdf
   done
 }
