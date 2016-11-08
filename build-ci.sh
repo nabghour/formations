@@ -32,9 +32,8 @@ build-html() {
 }
 
 build-pdf() {
-  mkdir -p output-pdf
   for cours in $(cut -d$ -f1 $LIST); do
-    docker run -v $PWD/output-pdf:/output -v $PWD/$OUTPUT_HTML_DIR/"$cours".html:/index.html -v $PWD/images:/images osones/wkhtmltopdf:stable -O landscape -s A5 -T 0 file:///index.html\?print-pdf /output/"$cours".pdf
+    wkhtmltopdf -O landscape -s A5 -T 0 file://../html/"$cours".html\?print-pdf ../pdf/"$cours".pdf
   done
 }
 
@@ -43,7 +42,7 @@ display_help() {
 
   USAGE : $0 options
 
-    -o output           Output format (html, pdf or all). If none, all outputs
+    -o output           Output format (html or pdf). If none, all outputs
                         are built
 
     -t theme            Theme to use, default to osones
@@ -91,14 +90,13 @@ if [[ $COURSE != "" ]]; then
   LIST=cours.list.tmp
 fi
 
-if [[ ! $OUTPUT =~ html|pdf|all ]]; then
-    echo "Invalid option: either html, pdf or all" >&2
+if [[ ! $OUTPUT =~ html|pdf ]]; then
+    echo "Invalid option: either html, pdf" >&2
     display_help
     exit 1
 elif [[ $OUTPUT == "html" ]]; then
     build-html
-elif [[ $OUTPUT == "pdf" || $OUTPUT == "all" ]]; then
-    build-html
+elif [[ $OUTPUT == "pdf"  ]]; then
     build-pdf
 fi
 rm -f cours.list.tmp
