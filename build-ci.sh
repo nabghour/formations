@@ -80,7 +80,6 @@ done
 if [[ $THEME == "" ]]; then
   THEME="osones"
 else
-  ls "$STYLE_DIR"/"$THEME".css
   ls "$STYLE_DIR"/"$THEME".css &> /dev/null
   [ $? -eq 2 ] && echo "Theme $THEME doesn't exist" && exit 1
 fi
