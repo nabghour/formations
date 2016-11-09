@@ -10,24 +10,25 @@ TITLE=""
 DATE=""
 
 build-html() {
-  mkdir -p $OUTPUT_HTML_DIR/revealjs/css/theme
-  mkdir -p $OUTPUT_HTML_DIR/images
+  mkdir -p "$OUTPUT_HTML_DIR"/revealjs/css/theme
+  mkdir -p "$OUTPUT_HTML_DIR"/images
 
   cp "$STYLE_DIR"/"$THEME".css "$OUTPUT_HTML_DIR"/revealjs/css/theme/"$THEME".css
   cp -r "$IMG_DIR"/* "$OUTPUT_HTML_DIR"/images/
 
   while IFS=$ read cours titre modules; do
     for module in $modules; do
-      cat $COURS_DIR/$module >> $COURS_DIR/slide-$cours
+      cat "$COURS_DIR"/"$module" >> "$COURS_DIR"/slide-"$cours"
     done
     TITLE=$titre
 
     # Header2 are only usefull for beamer, they need to be replaced with Header3 for revealjs interpretation
-    sed 's/^## /### /' $COURS_DIR/slide-$cours > tmp_slide-$cours
-    mv tmp_slide-$cours $COURS_DIR/slide-$cours
+    sed 's/^## /### /' "$COURS_DIR"/slide-"$cours" > tmp_slide-"$cours"
+    mv tmp_slide-"$cours" "$COURS_DIR"/slide-"$cours"
     echo "Build $TITLE"
-    pandoc --standalone --template=formations/templates/template.revealjs --slide-level 3 -V theme=$THEME -V navigation=frame -V revealjs-url=$REVEALJSURL -V slideNumber=true -V title="$TITLE" -V institute=Osones -o $OUTPUT_HTML_DIR/"$cours".html $COURS_DIR/slide-$cours
-    rm -f $COURS_DIR/slide-$cours
+    exit 0
+    pandoc --standalone --template=formations/templates/template.revealjs --slide-level 3 -V theme=$THEME -V navigation=frame -V revealjs-url="$REVEALJSURL" -V slideNumber=true -V title="$TITLE" -V institute=Osones -o "$OUTPUT_HTML_DIR"/"$cours".html "$COURS_DIR"/slide-"$cours"
+ #   rm -f "$COURS_DIR"/slide-"$cours"
   done < $LIST
 }
 
@@ -99,4 +100,4 @@ elif [[ $OUTPUT == "html" ]]; then
 elif [[ $OUTPUT == "pdf"  ]]; then
     build-pdf
 fi
-rm -f cours.list.tmp
+#rm -f cours.list.tmp
