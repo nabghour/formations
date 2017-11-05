@@ -1,4 +1,4 @@
-### Déployer et opérer OpenStack test
+#Déployer et opérer OpenStack
 
 ### Ce qu’on va voir
 
